@@ -1,0 +1,128 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  BIN: go-terraforming-mars
+  PKG: ./cmd
+  COVERAGE_DIR: coverage
+
+dotenv: [".env"]
+
+tasks:
+  default:
+    desc: Build and run the web app
+    aliases: [run]
+    cmds:
+      - task: build
+      - ./bin/{{.BIN}}
+
+  list:
+    desc: Lists available commands
+    aliases: [ls]
+    cmds:
+      - task --list-all
+    silent: true
+
+  build:
+    desc: Build the app for current platform
+    cmds:
+      - go build -o ./bin/{{.BIN}} -gcflags=all="-N -l" {{.PKG}}
+    sources:
+      - "**/*.go"
+      - go.mod
+      - go.sum
+    generates:
+      - bin/{{.BIN}}
+
+  build-release:
+    desc: Build the app for release (optimized)
+    cmds:
+      - go build -o ./bin/{{.BIN}} -ldflags="-s -w" {{.PKG}}
+
+  dev:
+    desc: Hot reloading initialization using air
+    cmds:
+      - air
+        --build.cmd 'go build -o ./bin/{{.BIN}} -gcflags=all="-N -l" {{.PKG}}'
+        --build.bin "bin/{{.BIN}}"
+        --build.delay "1000"
+        --build.include_ext "go"
+        --build.exclude_dir "bin,tmp,vendor"
+    silent: true
+
+  dev-native:
+    desc: Watch for changes and run tests (native Task watch)
+    cmds:
+      - task: test
+    watch: true
+    sources:
+      - "**/*.go"
+    interval: 500ms
+
+  test:
+    desc: Run all tests with race detection
+    cmds:
+      - go test -race -v ./...
+
+  test-short:
+    desc: Run tests without verbose output (faster feedback)
+    cmds:
+      - go test -race ./...
+
+  test-coverage:
+    desc: Run tests with coverage report
+    cmds:
+      - mkdir -p {{.COVERAGE_DIR}}
+      - go test -race -coverprofile={{.COVERAGE_DIR}}/coverage.out ./...
+      - go tool cover -html={{.COVERAGE_DIR}}/coverage.out -o {{.COVERAGE_DIR}}/coverage.html
+      - echo "Coverage report generated at {{.COVERAGE_DIR}}/coverage.html"
+
+  lint:
+    desc: Run Go linters (vet)
+    cmds:
+      - go vet ./...
+
+  fmt:
+    desc: Format code with gofumpt
+    cmds:
+      - gofumpt -l -w .
+
+  tidy:
+    desc: Tidy, vet and format the code
+    cmds:
+      - go mod tidy -v
+      - task: lint
+      - task: fmt
+
+  clean:
+    desc: Remove build artifacts and cache
+    cmds:
+      - rm -rf bin/
+      - rm -rf {{.COVERAGE_DIR}}/
+      - go clean -cache -testcache
+
+  verify:
+    desc: Run all checks (tidy, test, build)
+    cmds:
+      - task: tidy
+      - task: test
+      - task: build
+
+  install-tools:
+    desc: Install globally in GOPATH the necessary tools
+    cmds:
+      - task: install-air
+      - task: install-gofumpt
+
+  install-air:
+    desc: Install the hot-reloader. Watch for file changes and rebuild the binary.
+    cmds:
+      - go install github.com/air-verse/air@v1.63.1
+    internal: true
+
+  install-gofumpt:
+    desc: Install the gofumpt formatter.
+    cmds:
+      - go install mvdan.cc/gofumpt@v0.9.2
+    internal: true

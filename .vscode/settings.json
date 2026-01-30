@@ -1,0 +1,30 @@
+{
+  "go.useLanguageServer": true,
+  "gopls": {
+    "formatting.gofumpt": true,
+    "analyses": {
+      "unusedparams": true,
+      "unreachable": true,
+      "unusedwrite": true,
+      "shadow": true,
+      "copylock": true,
+      "printf": true,
+      "composite": true,
+      "bools": true,
+      "errorsas": true,
+      "lostcancel": true,
+      "nilness": true,
+      "loopclosure": true,
+      "fillreturns": true,
+      "tests": true,
+      "unusedresult": true,
+      "undeclaredname": true
+    }
+  },
+  "go.formatTool": "default",
+  "go.lintOnSave": "package",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}
