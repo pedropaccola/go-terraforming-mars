@@ -11,301 +11,228 @@ description: >-
   bonus, like the Viking site where the first man-made lander
   touched down.
 hexes:
-  - area: tharsis
-    q: 0
+  - q: 0
     r: -4
-    type: default
     placement_bonuses:
       steel: 2
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: -4
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       steel: 2
 
-  - area: tharsis
-    q: 3
+  - q: 3
     r: -4
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       cards: 1
 
-  - area: tharsis
-    q: 4
+  - q: 4
     r: -4
-    type: ocean
+    placement_rule: ocean
 
-  - area: tharsis
-    q: 0
+  - q: 0
     r: -3
-    type: volcanic
+    placement_rule: volcanic
     description: "Tharsis Tholus"
     placement_bonuses:
       steel: 1
 
-  - area: tharsis
-    q: 4
+  - q: 4
     r: -3
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       cards: 2
 
-  - area: tharsis
-    q: -2
+  - q: -2
     r: -2
-    type: volcanic
+    placement_rule: volcanic
     description: "Ascraeus Mons"
     placement_bonuses:
       cards: 1
 
-  - area: tharsis
-    q: 4
+  - q: 4
     r: -2
-    type: default
     placement_bonuses:
       steel: 1
 
-  - area: tharsis
-    q: -3
+  - q: -3
     r: -1
-    type: volcanic
+    placement_rule: volcanic
     description: "Pavonis Mons"
     placement_bonuses:
       titanium: 1
       plants: 1
 
-  - area: tharsis
-    q: -2
+  - q: -2
     r: -1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: -1
+  - q: -1
     r: -1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 0
+  - q: 0
     r: -1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: -1
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 2
+  - q: 2
     r: -1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 3
+  - q: 3
     r: -1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 4
+  - q: 4
     r: -1
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -4
+  - q: -4
     r: 0
-    type: volcanic
+    placement_rule: volcanic
     description: "Arsia Mons"
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -3
+  - q: -3
     r: 0
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -2
+  - q: -2
     r: 0
-    type: city
+    placement_rule: city
     description: "Noctis City"
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -1
+  - q: -1
     r: 0
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 0
+  - q: 0
     r: 0
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: 0
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 2
+  - q: 2
     r: 0
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 3
+  - q: 3
     r: 0
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: 4
+  - q: 4
     r: 0
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -4
+  - q: -4
     r: 1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: -3
+  - q: -3
     r: 1
-    type: default
     placement_bonuses:
       plants: 2
 
-  - area: tharsis
-    q: -2
+  - q: -2
     r: 1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: -1
+  - q: -1
     r: 1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 0
+  - q: 0
     r: 1
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: 1
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 2
+  - q: 2
     r: 1
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 3
+  - q: 3
     r: 1
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: 2
-    type: default
     placement_bonuses:
       plants: 1
 
-  - area: tharsis
-    q: -4
+  - q: -4
     r: 3
-    type: default
     placement_bonuses:
       steel: 2
 
-  - area: tharsis
-    q: -2
+  - q: -2
     r: 3
-    type: default
     placement_bonuses:
       cards: 1
 
-  - area: tharsis
-    q: -1
+  - q: -1
     r: 3
-    type: default
     placement_bonuses:
       cards: 1
 
-  - area: tharsis
-    q: 1
+  - q: 1
     r: 3
-    type: default
     placement_bonuses:
       titanium: 1
 
-  - area: tharsis
-    q: -4
+  - q: -4
     r: 4
-    type: default
     placement_bonuses:
       steel: 1
 
-  - area: tharsis
-    q: -3
+  - q: -3
     r: 4
-    type: default
     placement_bonuses:
       steel: 2
 
-  - area: tharsis
-    q: 0
+  - q: 0
     r: 4
-    type: ocean
+    placement_rule: ocean
     placement_bonuses:
       titanium: 2
-
-  - area: ganymede_colony
-    type: city
-    description: "Ganymede Colony"
-
-  - area: phobos_space_haven
-    type: city
-    description: "Phobos Space Haven"

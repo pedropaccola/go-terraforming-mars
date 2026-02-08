@@ -14,14 +14,14 @@ const MapRadius = 4
 // Represents a single hex cell on the board using axial coordinates.
 // Q, R, S are cube coordinates (S is redundant but stored for convenience).
 // Resources from: https://www.redblobgames.com/grids/hexagons/
-type HexCoordinates struct {
+type Hex struct {
 	Q int `yaml:"q"`
 	R int `yaml:"r"`
 	S int `yaml:"s"`
 }
 
 // HexDirections contains the six neighbor direction vectors for axial hex coordinates.
-var HexDirections = []HexCoordinates{
+var HexDirections = []Hex{
 	{Q: 1, R: -1, S: 0},
 	{Q: 1, R: 0, S: -1},
 	{Q: 0, R: -1, S: 1},
@@ -31,33 +31,34 @@ var HexDirections = []HexCoordinates{
 }
 
 // Creates a new Hex with the given q and r coordinates, computing s as -q-r.
-func NewHexCoordinates(q, r int) HexCoordinates {
-	return HexCoordinates{Q: q, R: r, S: -q - r}
+func NewHex(q, r int) Hex {
+	return Hex{Q: q, R: r, S: -q - r}
 }
 
-// Calculates the hex distance between this hex and another.
-func (h HexCoordinates) Distance(other HexCoordinates) int {
+// Calculates the hex distance from this hex to another.
+func (h Hex) DistanceFrom(other Hex) int {
 	vector := h.subtract(other)
 	return (max(vector.Q, -vector.Q) + max(vector.R, -vector.R) + max(vector.S, -vector.S)) / 2
 }
 
 // Checks if this hex is equal to another hex.
-func (h HexCoordinates) Equals(other HexCoordinates) bool {
+func (h Hex) Equals(other Hex) bool {
 	return h.Q == other.Q && h.R == other.R && h.S == other.S
 }
 
 // Returns the neighboring hex in the specified direction (0-5).
-func (h HexCoordinates) Neighbor(direction int) HexCoordinates {
+func (h Hex) Neighbor(direction int) Hex {
 	return h.add(h.direction(direction))
 }
 
-func (h HexCoordinates) String() string {
-	return fmt.Sprintf("{Q: %d, R: %d, S: %d}", h.Q, h.R, h.S)
+// Stringer for Hex.
+func (h Hex) String() string {
+	return fmt.Sprintf("{%d, %d, %d}", h.Q, h.R, h.S)
 }
 
 // Adds another hex to this one, returning a new hex.
-func (h HexCoordinates) add(other HexCoordinates) HexCoordinates {
-	return HexCoordinates{
+func (h Hex) add(other Hex) Hex {
+	return Hex{
 		Q: h.Q + other.Q,
 		R: h.R + other.R,
 		S: h.S + other.S,
@@ -65,7 +66,7 @@ func (h HexCoordinates) add(other HexCoordinates) HexCoordinates {
 }
 
 // Returns the hex direction vector for the given direction index (0-5).
-func (h HexCoordinates) direction(direction int) HexCoordinates {
+func (h Hex) direction(direction int) Hex {
 	if direction < 0 || direction > 5 {
 		panic("Direction must be between 0 and 5")
 	}
@@ -73,124 +74,72 @@ func (h HexCoordinates) direction(direction int) HexCoordinates {
 }
 
 // Subtracts another hex from this one, returning a new hex.
-func (h HexCoordinates) subtract(other HexCoordinates) HexCoordinates {
-	return HexCoordinates{
+func (h Hex) subtract(other Hex) Hex {
+	return Hex{
 		Q: h.Q - other.Q,
 		R: h.R - other.R,
 		S: h.S - other.S,
 	}
 }
 
-// Represents the "general area" the hex is on.
-// This is used to distinguish between special reserved areas,
-// such as "Ganymede Colony" and "Phobos Space Haven" and the main area
-// (Tharsis - which is coordinated and adjacency rules apply).
-type HexArea int
-
-const (
-	HexAreaTharsis HexArea = iota
-	HexAreaGanymedeColony
-	HexAreaPhobosSpaceHaven
-)
-
-var hexAreaNames = map[HexArea]string{
-	HexAreaTharsis:          "tharsis",
-	HexAreaGanymedeColony:   "ganymede_colony",
-	HexAreaPhobosSpaceHaven: "phobos_space_haven",
-}
-
-var hexAreaValues = map[string]HexArea{
-	"tharsis":            HexAreaTharsis,
-	"ganymede_colony":    HexAreaGanymedeColony,
-	"phobos_space_haven": HexAreaPhobosSpaceHaven,
-}
-
-var hexAreaTileable = map[HexArea]bool{
-	HexAreaTharsis:          true,
-	HexAreaGanymedeColony:   false,
-	HexAreaPhobosSpaceHaven: false,
-}
-
-func (ha HexArea) String() string {
-	return hexAreaNames[ha]
-}
-
-// IsTileable returns whether this area uses a coordinate grid with adjacency rules.
-func (ha HexArea) IsTileable() bool {
-	return hexAreaTileable[ha]
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler for YAML decoding.
-func (ha *HexArea) UnmarshalText(text []byte) error {
-	str := strings.ToLower(string(text))
-	val, ok := hexAreaValues[str]
-	if !ok {
-		return fmt.Errorf("unknown hex area: %q", str)
-	}
-	*ha = val
-	return nil
-}
-
-// Represents the reservations of hexes on the board.
-// A hex reservation determines exclusive placements for certain tiles,
+// Represents the placement rules of hexes on the board.
+// A hex placement rule determines exclusive placements for certain tiles,
 // such as cities, oceans and volcanic reserved areas.
-type HexReservation int
+type PlacementRule int
 
 const (
-	HexReservationDefault HexReservation = iota
-	HexReservationOcean
-	HexReservationVolcanic
-	HexReservationCity
+	PlacementRuleNone PlacementRule = iota
+	PlacementRuleOcean
+	PlacementRuleVolcanic
+	PlacementRuleCity
 )
 
-var hexReservationNames = map[HexReservation]string{
-	HexReservationDefault:  "default",
-	HexReservationOcean:    "ocean",
-	HexReservationVolcanic: "volcanic",
-	HexReservationCity:     "city",
+var placementRuleNames = map[PlacementRule]string{
+	PlacementRuleNone:     "none",
+	PlacementRuleOcean:    "ocean",
+	PlacementRuleVolcanic: "volcanic",
+	PlacementRuleCity:     "city",
 }
 
-var hexReservationValues = map[string]HexReservation{
-	"":         HexReservationDefault,
-	"default":  HexReservationDefault,
-	"ocean":    HexReservationOcean,
-	"volcanic": HexReservationVolcanic,
-	"city":     HexReservationCity,
+var placementRuleValues = map[string]PlacementRule{
+	"":         PlacementRuleNone,
+	"none":     PlacementRuleNone,
+	"ocean":    PlacementRuleOcean,
+	"volcanic": PlacementRuleVolcanic,
+	"city":     PlacementRuleCity,
 }
 
-func (hr HexReservation) String() string {
-	return hexReservationNames[hr]
+// Stringer for PlacementRule.
+func (pr PlacementRule) String() string {
+	return placementRuleNames[pr]
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler for YAML decoding.
-func (hr *HexReservation) UnmarshalText(text []byte) error {
+func (pr *PlacementRule) UnmarshalText(text []byte) error {
 	str := strings.ToLower(string(text))
-	val, ok := hexReservationValues[str]
+	val, ok := placementRuleValues[str]
 	if !ok {
-		return fmt.Errorf("unknown hex reservation: %q", str)
+		return fmt.Errorf("unknown placement rule: %q", str)
 	}
-	*hr = val
+	*pr = val
 	return nil
 }
 
 type HexMetadata struct {
-	Area             HexArea        `yaml:"area"`
-	Description      string         `yaml:"description"`
-	PlacementBonuses ResourceSet    `yaml:"placement_bonuses"`
-	Reservation      HexReservation `yaml:"reservation"`
+	Description      string        `yaml:"description"`
+	PlacementBonuses ResourceSet   `yaml:"placement_bonuses"`
+	PlacementRule    PlacementRule `yaml:"placement_rule"`
 }
 
 func (hm HexMetadata) String() string {
-	return fmt.Sprintf("{Area: %q, Reservation: %q, Description: %q, PlacementBonuses: %v}",
-		hm.Area, hm.Reservation, hm.Description, hm.PlacementBonuses)
+	return fmt.Sprintf("{Description: %q, PlacementBonuses: %v, PlacementRule: %q}",
+		hm.Description, hm.PlacementBonuses, hm.PlacementRule)
 }
 
 type Board struct {
-	Name           string
-	Description    string
-	MainArea       HexArea                        // Primary board area (e.g., Tharsis)
-	HexCoordinates map[HexCoordinates]HexMetadata // Map hexes (Tileable)
-	HexAreas       map[HexArea]HexMetadata        // Special areas (Non-tileable)
+	Name        string
+	Description string
+	Hexes       map[Hex]HexMetadata
 }
 
 // Custom unmarshaler for Board.
@@ -211,24 +160,11 @@ func (b *Board) UnmarshalYAML(unmarshal func(any) error) error {
 
 	b.Name = temp.Name
 	b.Description = temp.Description
-
-	// Map Board name to MainArea (panics if unknown)
-	val, ok := hexAreaValues[strings.ToLower(b.Name)]
-	if !ok {
-		panic(fmt.Sprintf("unknown board name: %q", b.Name))
-	}
-	b.MainArea = val
-
-	b.HexCoordinates = make(map[HexCoordinates]HexMetadata)
-	b.HexAreas = make(map[HexArea]HexMetadata)
+	b.Hexes = make(map[Hex]HexMetadata)
 
 	for _, entry := range temp.Hexes {
-		if entry.Area.IsTileable() {
-			coord := NewHexCoordinates(entry.Q, entry.R)
-			b.HexCoordinates[coord] = entry.HexMetadata
-		} else {
-			b.HexAreas[entry.Area] = entry.HexMetadata
-		}
+		coord := NewHex(entry.Q, entry.R)
+		b.Hexes[coord] = entry.HexMetadata
 	}
 
 	return nil
@@ -259,12 +195,9 @@ func initializeHexGrid(board *Board) {
 		r1 := max(-MapRadius, -q-MapRadius)
 		r2 := min(MapRadius, -q+MapRadius)
 		for r := r1; r <= r2; r++ {
-			coord := NewHexCoordinates(q, r)
-			if _, exists := board.HexCoordinates[coord]; !exists {
-				board.HexCoordinates[coord] = HexMetadata{
-					Area:        board.MainArea,
-					Reservation: HexReservationDefault,
-				}
+			coord := NewHex(q, r)
+			if _, exists := board.Hexes[coord]; !exists {
+				board.Hexes[coord] = HexMetadata{}
 			}
 		}
 	}
