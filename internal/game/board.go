@@ -131,58 +131,58 @@ func (ha *HexArea) UnmarshalText(text []byte) error {
 	return nil
 }
 
-// Represents the types of hexes on the board.
-// A type hex type determines exclusive placements for certain tiles,
+// Represents the reservations of hexes on the board.
+// A hex reservation determines exclusive placements for certain tiles,
 // such as cities, oceans and volcanic reserved areas.
-type HexType int
+type HexReservation int
 
 const (
-	HexTypeDefault HexType = iota
-	HexTypeOcean
-	HexTypeVolcanic
-	HexTypeCity
+	HexReservationDefault HexReservation = iota
+	HexReservationOcean
+	HexReservationVolcanic
+	HexReservationCity
 )
 
-var hexTypeNames = map[HexType]string{
-	HexTypeDefault:  "default",
-	HexTypeOcean:    "ocean",
-	HexTypeVolcanic: "volcanic",
-	HexTypeCity:     "city",
+var hexReservationNames = map[HexReservation]string{
+	HexReservationDefault:  "default",
+	HexReservationOcean:    "ocean",
+	HexReservationVolcanic: "volcanic",
+	HexReservationCity:     "city",
 }
 
-var hexTypeValues = map[string]HexType{
-	"":         HexTypeDefault,
-	"default":  HexTypeDefault,
-	"ocean":    HexTypeOcean,
-	"volcanic": HexTypeVolcanic,
-	"city":     HexTypeCity,
+var hexReservationValues = map[string]HexReservation{
+	"":         HexReservationDefault,
+	"default":  HexReservationDefault,
+	"ocean":    HexReservationOcean,
+	"volcanic": HexReservationVolcanic,
+	"city":     HexReservationCity,
 }
 
-func (ht HexType) String() string {
-	return hexTypeNames[ht]
+func (hr HexReservation) String() string {
+	return hexReservationNames[hr]
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler for YAML decoding.
-func (ht *HexType) UnmarshalText(text []byte) error {
+func (hr *HexReservation) UnmarshalText(text []byte) error {
 	str := strings.ToLower(string(text))
-	val, ok := hexTypeValues[str]
+	val, ok := hexReservationValues[str]
 	if !ok {
-		return fmt.Errorf("unknown hex type: %q", str)
+		return fmt.Errorf("unknown hex reservation: %q", str)
 	}
-	*ht = val
+	*hr = val
 	return nil
 }
 
 type HexMetadata struct {
-	Area             HexArea     `yaml:"area"`
-	Description      string      `yaml:"description"`
-	PlacementBonuses ResourceSet `yaml:"placement_bonuses"`
-	Type             HexType     `yaml:"type"`
+	Area             HexArea        `yaml:"area"`
+	Description      string         `yaml:"description"`
+	PlacementBonuses ResourceSet    `yaml:"placement_bonuses"`
+	Reservation      HexReservation `yaml:"reservation"`
 }
 
 func (hm HexMetadata) String() string {
-	return fmt.Sprintf("{Area: %q, Type: %q, Description: %q, PlacementBonuses: %v}",
-		hm.Area, hm.Type, hm.Description, hm.PlacementBonuses)
+	return fmt.Sprintf("{Area: %q, Reservation: %q, Description: %q, PlacementBonuses: %v}",
+		hm.Area, hm.Reservation, hm.Description, hm.PlacementBonuses)
 }
 
 type Board struct {
@@ -262,8 +262,8 @@ func initializeHexGrid(board *Board) {
 			coord := NewHexCoordinates(q, r)
 			if _, exists := board.HexCoordinates[coord]; !exists {
 				board.HexCoordinates[coord] = HexMetadata{
-					Area: board.MainArea,
-					Type: HexTypeDefault,
+					Area:        board.MainArea,
+					Reservation: HexReservationDefault,
 				}
 			}
 		}
