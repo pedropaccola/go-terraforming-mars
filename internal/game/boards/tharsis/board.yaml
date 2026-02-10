@@ -13,20 +13,17 @@ description: >-
 hexes:
   - q: 0
     r: -4
-    placement_bonuses:
-      steel: 2
+    placement_bonuses: [steel, steel]
 
   - q: 1
     r: -4
+    placement_bonuses: [steel, steel]
     placement_rule: ocean
-    placement_bonuses:
-      steel: 2
 
   - q: 3
     r: -4
+    placement_bonuses: [cards]
     placement_rule: ocean
-    placement_bonuses:
-      cards: 1
 
   - q: 4
     r: -4
@@ -34,205 +31,167 @@ hexes:
 
   - q: 0
     r: -3
-    placement_rule: volcanic
     description: "Tharsis Tholus"
-    placement_bonuses:
-      steel: 1
+    placement_bonuses: [steel]
+    placement_rule: volcanic
 
   - q: 4
     r: -3
+    placement_bonuses: [cards, cards]
     placement_rule: ocean
-    placement_bonuses:
-      cards: 2
 
   - q: -2
     r: -2
-    placement_rule: volcanic
     description: "Ascraeus Mons"
-    placement_bonuses:
-      cards: 1
+    placement_bonuses: [cards]
+    placement_rule: volcanic
 
   - q: 4
     r: -2
-    placement_bonuses:
-      steel: 1
+    placement_bonuses: [steel]
 
   - q: -3
     r: -1
-    placement_rule: volcanic
     description: "Pavonis Mons"
-    placement_bonuses:
-      titanium: 1
-      plants: 1
-
-  - q: -2
-    r: -1
-    placement_bonuses:
-      plants: 1
-
-  - q: -1
-    r: -1
-    placement_bonuses:
-      plants: 1
-
-  - q: 0
-    r: -1
-    placement_bonuses:
-      plants: 1
-
-  - q: 1
-    r: -1
-    placement_bonuses:
-      plants: 2
-
-  - q: 2
-    r: -1
-    placement_bonuses:
-      plants: 1
-
-  - q: 3
-    r: -1
-    placement_bonuses:
-      plants: 1
-
-  - q: 4
-    r: -1
-    placement_rule: ocean
-    placement_bonuses:
-      plants: 2
-
-  - q: -4
-    r: 0
+    placement_bonuses: [plants, titanium]
     placement_rule: volcanic
+
+  - q: -2
+    r: -1
+    placement_bonuses: [plants]
+
+  - q: -1
+    r: -1
+    placement_bonuses: [plants]
+
+  - q: 0
+    r: -1
+    placement_bonuses: [plants]
+
+  - q: 1
+    r: -1
+    placement_bonuses: [plants, plants]
+
+  - q: 2
+    r: -1
+    placement_bonuses: [plants]
+
+  - q: 3
+    r: -1
+    placement_bonuses: [plants]
+
+  - q: 4
+    r: -1
+    placement_bonuses: [plants, plants]
+    placement_rule: ocean
+
+  - q: -4
+    r: 0
     description: "Arsia Mons"
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
+    placement_rule: volcanic
 
   - q: -3
     r: 0
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
 
   - q: -2
     r: 0
-    placement_rule: city
     description: "Noctis City"
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
+    placement_rule: city
 
   - q: -1
     r: 0
+    placement_bonuses: [plants, plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 2
 
   - q: 0
     r: 0
+    placement_bonuses: [plants, plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 2
 
   - q: 1
     r: 0
+    placement_bonuses: [plants, plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 2
 
   - q: 2
     r: 0
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
 
   - q: 3
     r: 0
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
 
   - q: 4
     r: 0
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
 
   - q: -4
     r: 1
-    placement_bonuses:
-      plants: 1
+    placement_bonuses: [plants]
 
   - q: -3
     r: 1
-    placement_bonuses:
-      plants: 2
+    placement_bonuses: [plants, plants]
 
   - q: -2
     r: 1
-    placement_bonuses:
-      plants: 1
+    placement_bonuses: [plants]
 
   - q: -1
     r: 1
-    placement_bonuses:
-      plants: 1
+    placement_bonuses: [plants]
 
   - q: 0
     r: 1
-    placement_bonuses:
-      plants: 1
+    placement_bonuses: [plants]
 
   - q: 1
     r: 1
+    placement_bonuses: [plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 1
 
   - q: 2
     r: 1
+    placement_bonuses: [plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 1
 
   - q: 3
     r: 1
+    placement_bonuses: [plants]
     placement_rule: ocean
-    placement_bonuses:
-      plants: 1
 
   - q: 1
     r: 2
-    placement_bonuses:
-      plants: 1
+    placement_bonuses: [plants]
 
   - q: -4
     r: 3
-    placement_bonuses:
-      steel: 2
+    placement_bonuses: [steel, steel]
 
   - q: -2
     r: 3
-    placement_bonuses:
-      cards: 1
+    placement_bonuses: [cards]
 
   - q: -1
     r: 3
-    placement_bonuses:
-      cards: 1
+    placement_bonuses: [cards]
 
   - q: 1
     r: 3
-    placement_bonuses:
-      titanium: 1
+    placement_bonuses: [titanium]
 
   - q: -4
     r: 4
-    placement_bonuses:
-      steel: 1
+    placement_bonuses: [steel]
 
   - q: -3
     r: 4
-    placement_bonuses:
-      steel: 2
+    placement_bonuses: [steel, steel]
 
   - q: 0
     r: 4
+    placement_bonuses: [titanium, titanium]
     placement_rule: ocean
-    placement_bonuses:
-      titanium: 2

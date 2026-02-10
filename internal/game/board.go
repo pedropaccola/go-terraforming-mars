@@ -51,7 +51,7 @@ func (h Hex) Neighbor(direction int) Hex {
 	return h.add(h.direction(direction))
 }
 
-// Stringer for Hex.
+// fmt.Stringer for Hex.
 func (h Hex) String() string {
 	return fmt.Sprintf("{%d, %d, %d}", h.Q, h.R, h.S)
 }
@@ -109,12 +109,12 @@ var placementRuleValues = map[string]PlacementRule{
 	"city":     PlacementRuleCity,
 }
 
-// Stringer for PlacementRule.
+// fmt.Stringer for PlacementRule.
 func (pr PlacementRule) String() string {
 	return placementRuleNames[pr]
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler for YAML decoding.
+// encoding.TextUnmarshaler for PlacementRule.
 func (pr *PlacementRule) UnmarshalText(text []byte) error {
 	str := strings.ToLower(string(text))
 	val, ok := placementRuleValues[str]
@@ -127,43 +127,48 @@ func (pr *PlacementRule) UnmarshalText(text []byte) error {
 
 type HexMetadata struct {
 	Description      string        `yaml:"description"`
-	PlacementBonuses ResourceSet   `yaml:"placement_bonuses"`
+	PlacementBonuses []Resource    `yaml:"placement_bonuses"`
 	PlacementRule    PlacementRule `yaml:"placement_rule"`
 }
 
+// fmt.Stringer for HexMetadata.
 func (hm HexMetadata) String() string {
 	return fmt.Sprintf("{Description: %q, PlacementBonuses: %v, PlacementRule: %q}",
 		hm.Description, hm.PlacementBonuses, hm.PlacementRule)
 }
 
 type Board struct {
-	Name        string
-	Description string
-	Hexes       map[Hex]HexMetadata
+	Name        string              `yaml:"name"`
+	Description string              `yaml:"description"`
+	Hexes       map[Hex]HexMetadata `yaml:"-"`
 }
 
-// Custom unmarshaler for Board.
-func (b *Board) UnmarshalYAML(unmarshal func(any) error) error {
+// yaml.v3.Unmarshaler for Board.
+func (b *Board) UnmarshalYAML(value *yaml.Node) error {
+	type boardAlias Board
 	var temp struct {
-		Name        string `yaml:"name"`
-		Description string `yaml:"description"`
-		Hexes       []struct {
-			Q           int `yaml:"q"`
-			R           int `yaml:"r"`
+		boardAlias `yaml:",inline"`
+		HexEntries []struct {
+			Hex         `yaml:",inline"`
 			HexMetadata `yaml:",inline"`
 		} `yaml:"hexes"`
 	}
 
-	if err := unmarshal(&temp); err != nil {
+	if err := value.Decode(&temp); err != nil {
 		return err
 	}
 
-	b.Name = temp.Name
-	b.Description = temp.Description
+	*b = Board(temp.boardAlias)
 	b.Hexes = make(map[Hex]HexMetadata)
 
-	for _, entry := range temp.Hexes {
-		coord := NewHex(entry.Q, entry.R)
+	for _, entry := range temp.HexEntries {
+		h := entry.Hex
+		coord := NewHex(h.Q, h.R)
+
+		if _, exists := b.Hexes[coord]; exists {
+			return fmt.Errorf("duplicate hex entry for q=%d, r=%d", h.Q, h.R)
+		}
+
 		b.Hexes[coord] = entry.HexMetadata
 	}
 
@@ -171,7 +176,6 @@ func (b *Board) UnmarshalYAML(unmarshal func(any) error) error {
 }
 
 // Creates a new board by loading from a YAML file.
-// It initializes all hexes in the grid and overlays special hexes from the YAML.
 func NewBoard(path string) (*Board, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -183,7 +187,6 @@ func NewBoard(path string) (*Board, error) {
 		return nil, fmt.Errorf("failed to unmarshal board: %w", err)
 	}
 
-	// Initialize full hex grid (fill in missing hexes with empty metadata)
 	initializeHexGrid(&board)
 
 	return &board, nil

@@ -4,6 +4,16 @@ import (
 	"testing"
 )
 
+func countResources(resources []Resource, target Resource) int {
+	count := 0
+	for _, r := range resources {
+		if r == target {
+			count++
+		}
+	}
+	return count
+}
+
 func TestHex(t *testing.T) {
 	t.Run("NewHex computes S coordinate", func(t *testing.T) {
 		tests := []struct {
@@ -174,11 +184,12 @@ func TestHexMetadata(t *testing.T) {
 	t.Run("String format", func(t *testing.T) {
 		hm := HexMetadata{
 			Description:      "Test Hex",
-			PlacementBonuses: ResourceSet{Steel: 2, Plants: 1},
+			PlacementBonuses: []Resource{ResourceSteel, ResourceSteel, ResourcePlants},
 			PlacementRule:    PlacementRuleVolcanic,
 		}
 
-		expected := `{Description: "Test Hex", PlacementBonuses: {Animals: 0, Cards: 0, Energy: 0, Heat: 0, MegaCredits: 0, Microbes: 0, Plants: 1, Steel: 2, Titanium: 0}, PlacementRule: "volcanic"}`
+		// %v for the slice will use the String() method of Resource
+		expected := `{Description: "Test Hex", PlacementBonuses: [steel steel plants], PlacementRule: "volcanic"}`
 		if hm.String() != expected {
 			t.Errorf("Expected %s, got %s", expected, hm.String())
 		}
@@ -260,14 +271,14 @@ func TestBoard(t *testing.T) {
 
 		// Check hex at (0, -4) has steel: 2
 		hex := board.Hexes[NewHex(0, -4)]
-		if hex.PlacementBonuses.Steel != 2 {
-			t.Errorf("Expected 2 steel bonus, got %d", hex.PlacementBonuses.Steel)
+		if count := countResources(hex.PlacementBonuses, ResourceSteel); count != 2 {
+			t.Errorf("Expected 2 steel bonus, got %d", count)
 		}
 
 		// Check hex at (1, -1) has plants: 2
 		hex2 := board.Hexes[NewHex(1, -1)]
-		if hex2.PlacementBonuses.Plants != 2 {
-			t.Errorf("Expected 2 plants bonus, got %d", hex2.PlacementBonuses.Plants)
+		if count := countResources(hex2.PlacementBonuses, ResourcePlants); count != 2 {
+			t.Errorf("Expected 2 plants bonus, got %d", count)
 		}
 	})
 
