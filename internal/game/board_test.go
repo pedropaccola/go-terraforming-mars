@@ -17,7 +17,7 @@ func countResources(resources []Resource, target Resource) int {
 func TestHex(t *testing.T) {
 	t.Run("NewHex computes S coordinate", func(t *testing.T) {
 		tests := []struct {
-			q, r, expectedS int
+			q, r, expected int
 		}{
 			{0, 0, 0},
 			{1, 2, -3},
@@ -26,8 +26,8 @@ func TestHex(t *testing.T) {
 		}
 		for _, tc := range tests {
 			h := NewHex(tc.q, tc.r)
-			if h.S != tc.expectedS {
-				t.Errorf("NewHex(%d, %d): expected S=%d, got S=%d", tc.q, tc.r, tc.expectedS, h.S)
+			if h.S != tc.expected {
+				t.Errorf("NewHex(%d, %d): expected S=%d, got S=%d", tc.q, tc.r, tc.expected, h.S)
 			}
 		}
 	})
