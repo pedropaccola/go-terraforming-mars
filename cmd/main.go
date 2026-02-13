@@ -10,10 +10,7 @@ import (
 
 func main() {
 	// Load the Tharsis board
-	board, err := game.NewBoard("internal/game/boards/tharsis/board.yaml")
-	if err != nil {
-		log.Fatal(err)
-	}
+	board := game.NewBoard(game.BoardNameTharsis)
 
 	// Create the game engine
 	eng := engine.NewEngine()
