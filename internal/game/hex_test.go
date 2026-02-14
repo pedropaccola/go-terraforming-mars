@@ -108,7 +108,7 @@ func TestHex(t *testing.T) {
 
 	t.Run("String format", func(t *testing.T) {
 		h := NewHex(1, 2)
-		expected := "{1, 2, -3}"
+		expected := "1,2,-3"
 		if h.String() != expected {
 			t.Errorf("Expected %q, got %q", expected, h.String())
 		}
@@ -121,10 +121,10 @@ func TestPlacementRule(t *testing.T) {
 			rule     PlacementRule
 			expected string
 		}{
-			{PlacementRuleNone, "none"},
-			{PlacementRuleOcean, "ocean"},
-			{PlacementRuleVolcanic, "volcanic"},
-			{PlacementRuleCity, "city"},
+			{PlacementRuleNone, "None"},
+			{PlacementRuleOcean, "Ocean"},
+			{PlacementRuleVolcanic, "Volcanic"},
+			{PlacementRuleCity, "City"},
 		}
 		for _, tc := range tests {
 			if tc.rule.String() != tc.expected {
@@ -144,7 +144,7 @@ func TestHexMetadata(t *testing.T) {
 		}
 
 		// %v for the slice will use the String() method of Resource
-		expected := `{Description: "Test Hex", PlacementBonuses: [steel steel plants], PlacementRule: "volcanic"}`
+		expected := `Description: "Test Hex", PlacementBonuses: [Steel Steel Plants], PlacementRule: "Volcanic"`
 		if hm.String() != expected {
 			t.Errorf("Expected %s, got %s", expected, hm.String())
 		}

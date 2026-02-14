@@ -10,15 +10,15 @@ func TestResource(t *testing.T) {
 			resource Resource
 			expected string
 		}{
-			{ResourceAnimals, "animals"},
-			{ResourceCards, "cards"},
-			{ResourceEnergy, "energy"},
-			{ResourceHeat, "heat"},
-			{ResourceMegacredits, "megacredits"},
-			{ResourceMicrobes, "microbes"},
-			{ResourcePlants, "plants"},
-			{ResourceSteel, "steel"},
-			{ResourceTitanium, "titanium"},
+			{ResourceAnimals, "Animals"},
+			{ResourceCards, "Cards"},
+			{ResourceEnergy, "Energy"},
+			{ResourceHeat, "Heat"},
+			{ResourceMegacredits, "Megacredits"},
+			{ResourceMicrobes, "Microbes"},
+			{ResourcePlants, "Plants"},
+			{ResourceSteel, "Steel"},
+			{ResourceTitanium, "Titanium"},
 		}
 
 		for _, tc := range tests {

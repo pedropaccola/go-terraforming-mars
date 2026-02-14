@@ -44,7 +44,7 @@ func (h Hex) Neighbor(direction int) Hex {
 
 // fmt.Stringer for Hex.
 func (h Hex) String() string {
-	return fmt.Sprintf("{%d, %d, %d}", h.Q, h.R, h.S)
+	return fmt.Sprintf("%d,%d,%d", h.Q, h.R, h.S)
 }
 
 // Adds another hex to this one, returning a new hex.
@@ -86,10 +86,10 @@ const (
 )
 
 var placementRuleNames = map[PlacementRule]string{
-	PlacementRuleNone:     "none",
-	PlacementRuleOcean:    "ocean",
-	PlacementRuleVolcanic: "volcanic",
-	PlacementRuleCity:     "city",
+	PlacementRuleNone:     "None",
+	PlacementRuleOcean:    "Ocean",
+	PlacementRuleVolcanic: "Volcanic",
+	PlacementRuleCity:     "City",
 }
 
 // fmt.Stringer for PlacementRule.
@@ -105,6 +105,6 @@ type HexMetadata struct {
 
 // fmt.Stringer for HexMetadata.
 func (hm HexMetadata) String() string {
-	return fmt.Sprintf("{Description: %q, PlacementBonuses: %v, PlacementRule: %q}",
+	return fmt.Sprintf("Description: %q, PlacementBonuses: %v, PlacementRule: %q",
 		hm.Description, hm.PlacementBonuses, hm.PlacementRule)
 }
