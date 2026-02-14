@@ -9,14 +9,11 @@ import (
 )
 
 func main() {
-	// Load the Tharsis board
-	board := game.NewBoard(game.BoardNameTharsis)
-
 	// Create the game engine
 	eng := engine.NewEngine()
 
 	// Create and register scenes
-	gameScene := scenes.NewGameScene(eng, board)
+	gameScene := scenes.NewGameScene(eng, game.BoardNameTharsis)
 	menuScene := scenes.NewMenuScene(eng)
 
 	eng.RegisterScene("menu", menuScene)

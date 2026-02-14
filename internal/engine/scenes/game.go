@@ -24,21 +24,25 @@ const (
 
 // GameScene displays the main game board
 type GameScene struct {
-	engine      *engine.Engine
-	board       *game.Board
-	hoveredHex  *game.Hex
 	boardOffset struct{ x, y float64 } // Camera offset for panning
+	engine      *engine.Engine
+	hoveredHex  *game.Hex
+	state       *game.GameState
 }
 
 // NewGameScene creates a new game scene with the given board
-func NewGameScene(eng *engine.Engine, board *game.Board) *GameScene {
+func NewGameScene(eng *engine.Engine, board game.BoardName) *GameScene {
+	opts := game.GameStateOpts{
+		BoardName: board,
+	}
+
 	return &GameScene{
-		engine: eng,
-		board:  board,
 		boardOffset: struct{ x, y float64 }{
 			x: float64(engine.ScreenWidth) / 2,
 			y: float64(engine.ScreenHeight) / 2,
 		},
+		engine: eng,
+		state:  game.NewGameState(opts),
 	}
 }
 
@@ -93,7 +97,7 @@ func (g *GameScene) drawBackground(screen *ebiten.Image) {
 
 // Draws the board of the game scene
 func (g *GameScene) drawBoard(screen *ebiten.Image) {
-	for coord, metadata := range g.board.Hexes {
+	for coord, metadata := range g.state.Board.Hexes {
 		g.drawHex(screen, coord, metadata)
 	}
 }
@@ -176,7 +180,7 @@ func (g *GameScene) roundHex(q, r float64) *game.Hex {
 	coord := game.NewHex(int(rq), int(rr))
 
 	// Return nil if the hex does not exist on the board
-	if _, exists := g.board.Hexes[coord]; !exists {
+	if _, exists := g.state.Board.Hexes[coord]; !exists {
 		return nil
 	}
 	return &coord
